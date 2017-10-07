@@ -1,14 +1,19 @@
 body {
-  background-color: gray;
+  /*background-color: gray;*/
 
   /*width: 100vw;
   height: 50vh;*/
+  margin: 0;
+  padding: 0;
 }
 
 .navbar{
   background-color: #333;
   color: white;
   position: fixed;
+  display: flex;
+  justify-content: space-around;
+
   /*overflow: hidden;*/
   bottom: 0;
   width: 100%;
@@ -21,4 +26,13 @@ body {
     text-align: center;
     padding: 14px 16px;
     text-decoration: none;
+}
+
+a{
+  display: flex;
+}
+
+.agencyLogo{
+  height: 70px;
+
 }
