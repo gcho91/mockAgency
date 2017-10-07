@@ -11,7 +11,8 @@ $stateProvider.state("home", {
 })
 .state('services', {
   url: '/services',
-  templateUrl: "view/services.html"
+  templateUrl: "view/services.html",
+  css: "styles.css"
 })
 .state('blog', {
   url: "/blog",
