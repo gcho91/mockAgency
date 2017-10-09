@@ -22,28 +22,10 @@ $stateProvider.state("home", {
   url: '/clients',
   templateUrl: "public/clients/clients.html"
 })
+.state('clientform', {
+  url: '/clients/form',
+  templateUrl: "public/clients/form.html"
+})
 
 $urlRouterProvider.otherwise("/")
 })
-
-// angular.module("sproFinder", ["ui.router"]).config(function($stateProvider, $urlRouterProvider) {
-//   $urlRouterProvider.otherwise("/")
-//   $stateProvider.state("about", {
-//     url: "/",
-//     templateUrl: "js/about/aboutTmpl.html"
-//   })
-//   .state("nearme", {
-//     url: "/nearme",
-//     templateUrl: "js/nearme/nearmeTmpl.html",
-//     controller: "nearmeCtrl"
-//   })
-//   .state("search", {
-//     url: "/search",
-//     templateUrl: "js/search/searchTmpl.html",
-//     controller: "searchCtrl"
-//   })
-//   .state("learn", {
-//     url: "/learn",
-//     templateUrl: "js/learn/learnTmpl.html",
-//     controller: "learnCtrl"
-//   })
