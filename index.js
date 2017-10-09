@@ -15,7 +15,7 @@ const port = 3000;
 const app = express();
 
 // app.use(session({secret: 'some-random-string'}))
-
+app.use('/', express.static(__dirname))
 app.use(session({secret: 'some-random-string',
 resave: true,
 saveUninitialized: true
@@ -42,7 +42,7 @@ passport.deserializeUser(function(obj, done) {
 
 app.get('/login',
   passport.authenticate('auth0', {}), function (req, res) {
-  res.redirect("/");
+  res.redirect("/#/");
 });
 
 
