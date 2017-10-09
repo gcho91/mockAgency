@@ -13,8 +13,6 @@ body {
   position: fixed;
   display: flex;
   justify-content: space-around;
-
-  /*overflow: hidden;*/
   bottom: 0;
   width: 100%;
   /*align-content: center;*/
