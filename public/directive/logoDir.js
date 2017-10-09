@@ -1,6 +1,6 @@
 angular.module('agencySite').directive('logo', function(){
   return {
-    templateUrl: "view/logo.html",
+    templateUrl: "./logo.html",
     restrict: "E"
   }
 })

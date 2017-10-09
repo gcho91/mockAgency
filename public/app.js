@@ -2,25 +2,25 @@ angular.module('agencySite', ["ui.router"]).config(function($stateProvider, $url
 
 $stateProvider.state("home", {
   url: "/",
-  templateUrl: "view/home.html",
+  templateUrl: "public/home/home.html",
   controller: "mainCtrl"
 })
 .state('about', {
   url: "/about",
-  templateUrl: "view/about.html"
+  templateUrl: "public/about/about.html"
 })
 .state('services', {
   url: '/services',
-  templateUrl: "view/services.html",
+  templateUrl: "public/services/services.html",
   css: "styles.css"
 })
 .state('blog', {
   url: "/blog",
-  templateUrl: "view/blog.html"
+  templateUrl: "public/blog/blog.html"
 })
 .state('clients', {
   url: '/clients',
-  templateUrl: "view/clients.html"
+  templateUrl: "public/clients/clients.html"
 })
 
 $urlRouterProvider.otherwise("/")
