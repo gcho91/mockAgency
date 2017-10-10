@@ -40,8 +40,40 @@ app.use(passport.initialize())
 app.use(passport.session())
 passport.use(strategy);
 
-//need the resave and unint to get rid of warning
 
+//copying from AJ
+
+
+// using passport to access auth0
+// { domain: config.auth0.domain ... etc}
+// passport.use(new Auth0Strategy({
+//     domain,
+//     clientID,
+//     clientSecret,
+//     callbackURL:  '/auth/callback'
+//    }, (accessToken, refreshToken, extraParams, profile, done) => {
+//      //Find user in database
+//      console.log(profile);
+//      const db = app.get('db');
+//      // .then means this is a promise
+//      db.getUserByAuthId([profile._json.sub]).then((user, err) => {
+//          console.log('INITIAL: ', user);
+//        if (!user[0]) { //if there isn't a user, we'll create one!
+//          console.log('CREATING USER');
+//          db.createUserByAuth([profile._json.sub]).then((user, err) => {
+//            console.log('USER CREATED', user[0]);
+//            return done(err, user[0]); // GOES TO SERIALIZE USER
+//          })
+//        } else { //when we find the user, return it
+//          console.log('FOUND USER', user[0]);
+//          return done(err, user[0]);
+//        }
+//      });
+//    }
+//  ));
+
+
+//end copying from AJ
 
 //create end points for database
 app.get( '/users', userctrl.get );
