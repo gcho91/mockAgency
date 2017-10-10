@@ -44,8 +44,11 @@ passport.use(strategy);
 //copying from AJ
 
 
-// using passport to access auth0
-// { domain: config.auth0.domain ... etc}
+// app.use(passport.initialize());
+// app.use(passport.session());
+//
+// // using passport to access auth0
+// // { domain: config.auth0.domain ... etc}
 // passport.use(new Auth0Strategy({
 //     domain,
 //     clientID,
@@ -71,13 +74,24 @@ passport.use(strategy);
 //      });
 //    }
 //  ));
+//
+// // put user on session
+//  passport.serializeUser((user, done) => {
+//      done(null, user);
+//  });
+//
+// // pull user from session for manipulation
+//  passport.deserializeUser((user, done) => {
+//      console.log(user);
+//      done(null, user);
+//  });
 
 
 //end copying from AJ
 
 //create end points for database
-app.get( '/users', userctrl.get );
-
+app.get( '/users', userctrl.getUsers );
+app.get('/clients', userctrl.getClients );
 
 
 passport.serializeUser(function(user, done) {
@@ -96,7 +110,25 @@ passport.deserializeUser(function(obj, done) {
 // });
 
 app.get('/login',
-  passport.authenticate('auth0', {}), function (req, res) {
+  passport.authenticate('auth0', {}), function (req, res, done) {
+
+  console.log("req.user", req.user._json.sub)
+  const dbInstance=req.app.get('db');
+
+  dbInstance.get_user_by_authid([req.user._json.sub])
+    .then((user, err) => {
+      console.log("getting user", user)
+      if (!user[0]) {
+        dbInstance.create_user_by_authid([req.user._json.sub])
+          .then((user, err) => {
+            console.log("creating user", user)
+            return done (err, user[0])
+          })
+      } else {
+        return done (err, user[0])
+      }
+    });
+
   res.redirect("/#/clients/form");
 
 });

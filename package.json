@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/gcho91/mockAgency#readme",
   "dependencies": {
+    "cors": "^2.8.4",
     "express": "^4.16.1",
+    "express-jwt": "^5.3.0",
     "express-session": "^1.15.6",
     "massive": "^4.3.0",
     "passport": "^0.4.0",
