@@ -1,11 +1,34 @@
 <h2>Update your info</h2>
-<form action="">
-First name: <br />
-<input type="text" name="firstname">
-<br />
-Last name: <br />
-<input type="text" name = "lastname">
-<br />
-<input type="submit" value="submit">
+<form ng-submit = "updateUser(form)">
+  Last name: <br />
+  <input ng-model="form.lastname" type="text" name="lastname">
+  <br />
 
+  First name: <br />
+  <input ng-model="form.firstname" type="text" name="firstname">
+<br />
+
+  Client or employee? <br />
+    <select ng-model="form.role" name="role">
+      <option>client</option>
+      <option>emp</option>
+      <!-- <option ng-value="client">Client</option>
+      <option ng-value="employee">Employee</option> -->
+    </select>
+
+  <br /><br />
+
+  <!-- {{ test }} <br /> -->
+
+    <!-- <input ng-click=sfd(form) type="submit" value="submit"> -->
+    <input type="submit" value="submit">
+    <!-- ng-submit function
+-->
 </form>
+
+<button ng-click="sessiontest()">FUCK</button>
+<!-- <input type="radio" name="role" value="client" ng-model="formData.role">
+Client-->
+
+<hr>
+{{ form }}

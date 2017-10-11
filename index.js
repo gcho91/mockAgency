@@ -4,7 +4,8 @@ const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 const strategy = require('./server/strategy.js')
 const massive = require('massive');
-const config = require('./server/config.js')
+const config = require('./server/config.js');
+const bodyParser  = require('body-parser');
 
 
 const userctrl = require('./userctrl.js')
@@ -20,9 +21,6 @@ massive(config.postgres).then(instance => {
 })
 
 const {clientSecret, dbUser, database} = require('./server/config.js');
-// const strategy = require()
-
-const bodyParser  = require('body-parser');
 
 const port = 3000;
 
@@ -38,7 +36,85 @@ app.use(session({
 
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(bodyParser.json());
 passport.use(strategy);
+
+//create end points for database
+app.get( '/users', userctrl.getUsers );
+app.get('/clients', userctrl.getClients );
+
+//session test
+app.get('/auth/session', (req, res, next )=> {
+  console.log(req.user)
+  res.send(req.session);
+})
+// app.put('/clients/form', userctrl.updateUser );
+
+//update user info the first time a user logs in
+// app.post('/users', userctrl.update_user);
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+
+
+app.get('/login',
+  passport.authenticate('auth0', {}), function (req, res, done) {
+
+  console.log("req.user", req.user._json.sub)
+  const dbInstance=req.app.get('db');
+
+  dbInstance.get_user_by_authid([req.user._json.sub])
+    .then((user, err) => {
+      console.log("getting user", user)
+      if (!user[0]) {
+        dbInstance.create_user_by_authid([req.user._json.sub])
+          .then((user, err) => {
+            console.log("creating user", user)
+            return done (err, user[0])
+          })
+      } else {
+        return done (err, user[0])
+      }
+    });
+
+  res.redirect("/#/clients/form");
+
+});
+
+//update user info when submitting form
+app.put('/user', (req, res, next) => {
+  const dbInstance = req.app.get('db');
+  console.log("server update user", req.body )
+    // dbInstance.update_user([req.body]);
+
+
+  //   const {lastname, firstname, role} = req.body;
+  // dbInstance.update_user([req.user])
+
+  // dbInstance.update_user([lastname, firstname, role]).then( response => {
+  //   console.log(res)
+  // })
+
+  //  dbInstance.update_user([lastname, firstname, role])
+  // .then( () => res.status(200).send() )
+  // .catch( () => res.status(500).send() );
+
+});
+
+
+
+
+app.listen(port, function(){
+  console.log(`Listening on port ${port}!!!`)
+})
+
+
 
 
 //copying from AJ
@@ -88,63 +164,3 @@ passport.use(strategy);
 
 
 //end copying from AJ
-
-//create end points for database
-app.get( '/users', userctrl.getUsers );
-app.get('/clients', userctrl.getClients );
-
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(obj, done) {
-  done(null, obj);
-});
-
-
-
-// app.get('/login',
-//   passport.authenticate('auth0', {}), function (req, res) {
-//   res.redirect("/#/");
-// });
-
-app.get('/login',
-  passport.authenticate('auth0', {}), function (req, res, done) {
-
-  console.log("req.user", req.user._json.sub)
-  const dbInstance=req.app.get('db');
-
-  dbInstance.get_user_by_authid([req.user._json.sub])
-    .then((user, err) => {
-      console.log("getting user", user)
-      if (!user[0]) {
-        dbInstance.create_user_by_authid([req.user._json.sub])
-          .then((user, err) => {
-            console.log("creating user", user)
-            return done (err, user[0])
-          })
-      } else {
-        return done (err, user[0])
-      }
-    });
-
-  res.redirect("/#/clients/form");
-
-});
-
-
-// app.get('/auth', passport.authenticate ('auth0'));
-// app.get('/auth/callback', passport.authenticate('auth0', { successRedirect: '/'}));
-// app.get('/auth/callback', passport.authenticate('auth0', { successRedirect: '/clients/form'}));
-
-//
-// app.get('/auth/me', function(req, res, next) {
-// if (!req.user) return res.status(404).json({err: "No user on req"});
-// res.status(200).send(req.user);
-// })
-
-
-app.listen(port, function(){
-  console.log(`Listening on port ${port}!!!`)
-})

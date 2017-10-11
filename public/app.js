@@ -24,7 +24,8 @@ $stateProvider.state("home", {
 })
 .state('clientform', {
   url: '/clients/form',
-  templateUrl: "public/clients/form.html"
+  templateUrl: "public/clients/form.html",
+  controller: "formCtrl"
 })
 
 $urlRouterProvider.otherwise("/")
